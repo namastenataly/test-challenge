@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flappy Bird</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+        }
+
+        #game-container {
+            position: relative;
+            width: 400px;
+            height: 600px;
+            margin: 0 auto;
+            background-color: skyblue;
+            overflow: hidden;
+        }
+
+        #bird {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: yellow;
+            top: 50%;
+            left: 50px;
+            transform: translateY(-50%);
+        }
+
+        #obstacle {
+            position: absolute;
+            width: 50px;
+            height: 300px;
+            background-color: green;
+            bottom: 0;
+            left: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div id="game-container">
+        <div id="bird"></div>
+        <div id="obstacle"></div>
+    </div>
+    <script>
+        document.addEventListener('keydown', flap);
+
+        let bird = document.getElementById('bird');
+        let gameContainer = document.getElementById('game-container');
+        let gravity = 0.5;
+        let velocity = 0;
+
+        function flap(event) {
+            if (event.key === ' ') { // Flap when spacebar is pressed
+                velocity = -8;
+            }
+        }
+
+        function updateBird() {
+            velocity += gravity;
+            bird.style.top = (bird.offsetTop + velocity) + 'px';
+
+            if (bird.offsetTop < 0 || bird.offsetTop > gameContainer.clientHeight - bird.clientHeight) {
+                gameOver();
+            }
+        }
+
+        function updateObstacle() {
+            let obstacle = document.getElementById('obstacle');
+            obstacle.style.left = (obstacle.offsetLeft - 5) + 'px';
+
+            if (obstacle.offsetLeft + obstacle.clientWidth < 0) {
+                resetObstacle();
+            }
+        }
+
+        function resetObstacle() {
+            let obstacle = document.getElementById('obstacle');
+            obstacle.style.left = '400px'; // Reset obstacle to the right side
+        }
+
+        function gameOver() {
+            alert('Game Over!');
+            location.reload(); // Reload the page to restart the game
+        }
+
+        setInterval(updateBird, 30);
+        setInterval(updateObstacle, 30);
+    </script>
+</body>
+</html>
